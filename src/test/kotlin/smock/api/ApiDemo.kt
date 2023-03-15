@@ -3,6 +3,9 @@ package smock.api
 import java.lang.Exception
 
 class ApiDemo() {
+    @Smocked
+    lateinit var someObj: Any
+
     fun demo() {
         val mockedObj = smock<List<String>>()
         every { mockedObj.get(0) } returns "SomeValue"
