@@ -1,9 +1,10 @@
 package smock.api
 
+import smock.internal.SmockSharedContext
 import java.lang.Exception
 
 inline fun <reified T> smock(): T {
-    TODO()
+    return SmockSharedContext.dslDelegate.mock()
 }
 
 inline fun <reified R> every(mockedObjMethod: () -> R): EveryScope<R> {
