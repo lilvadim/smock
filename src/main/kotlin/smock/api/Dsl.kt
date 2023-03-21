@@ -1,32 +1,32 @@
 package smock.api
 
-import smock.internal.SmockSharedContext
-import java.lang.Exception
+import smock.internal.SmockContext
 
 inline fun <reified T> smock(): T {
-    return SmockSharedContext.dslDelegate.mock()
+    return SmockContext.dslDelegate.mock()
 }
 
 inline fun <reified R> every(mockedObjMethod: () -> R): EveryScope<R> {
-    TODO()
+    mockedObjMethod()
+    return EveryScope()
 }
 
 class EveryScope<T> {
     infix fun returns(value: T) {
-        TODO()
+        SmockContext.dslDelegate.returns(value)
     }
 
     infix fun answers(answer: () -> T) {
-        TODO()
+        SmockContext.dslDelegate.answers(answer)
     }
 
-    infix fun throws(exception: Exception) {
-        TODO()
+    infix fun throws(throwable: Throwable) {
+        SmockContext.dslDelegate.throws(throwable)
     }
 }
 
 infix fun EveryScope<Unit>.just(runs: Runs) {
-    TODO()
+    SmockContext.dslDelegate.returns(Unit)
 }
 
 object Runs
