@@ -1,6 +1,8 @@
-package smock.internal
+package smock.external.cglib
 
 import net.sf.cglib.proxy.Enhancer
+import smock.internal.CallValuesStorage
+import smock.internal.MockFactory
 import kotlin.reflect.KClass
 
 class CglibMockFactory(

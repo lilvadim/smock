@@ -1,7 +1,8 @@
-package smock.internal
+package smock.external.cglib
 
 import net.sf.cglib.proxy.MethodInterceptor
 import net.sf.cglib.proxy.MethodProxy
+import smock.internal.CallValuesStorage
 import java.lang.reflect.Method
 
 class CglibSmockInterceptor(

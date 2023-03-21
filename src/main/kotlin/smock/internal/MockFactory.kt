@@ -1,5 +1,6 @@
 package smock.internal
 
+import smock.external.cglib.CglibMockFactory
 import kotlin.reflect.KClass
 
 interface MockFactory {
