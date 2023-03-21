@@ -6,6 +6,10 @@ inline fun <reified T> smock(): T {
     return SmockContext.dslDelegate.mock()
 }
 
+inline fun <reified T> spy(): T {
+    return SmockContext.dslDelegate.spy()
+}
+
 inline fun <reified R> every(mockedObjMethod: () -> R): EveryScope<R> {
     mockedObjMethod()
     return EveryScope()

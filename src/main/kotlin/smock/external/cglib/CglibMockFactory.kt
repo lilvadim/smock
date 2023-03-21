@@ -11,10 +11,17 @@ class CglibMockFactory(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any> mock(kClass: KClass<T>): T {
-        val enhancer = Enhancer().apply {
+        return Enhancer().apply {
             setSuperclass(kClass.java)
             setCallback(CglibMockInterceptor(callValuesStorage))
-        }
-        return enhancer.create() as T
+        }.create() as T
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : Any> spy(kClass: KClass<T>): T {
+        return Enhancer().apply {
+            setSuperclass(kClass.java)
+            setCallback(CglibSpyInterceptor(callValuesStorage))
+        }.create() as T
     }
 }

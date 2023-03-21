@@ -2,16 +2,28 @@ package smock.api
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.lang.Exception
+import smock.api.annotations.Smocked
+import smock.api.annotations.smockAnnotated
+import kotlin.test.Ignore
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 
-class ApiDemo() {
+class ApiDemo {
     @Smocked
-    lateinit var someObj: Any
+    lateinit var someObj: List<Double>
 
     @Test
-    fun demo() {
+    fun annotationsDemo() {
+        smockAnnotated(this)
+
+        every { someObj.isEmpty() } returns false
+
+        assertFalse { someObj.isEmpty() }
+    }
+
+    @Test
+    fun smockDemo() {
         val mockedObj = smock<List<String>>()
 
         every { mockedObj[0] } returns "SomeValue"
@@ -36,5 +48,17 @@ class ApiDemo() {
         assertThrows<Exception>("Size Exception") { mockedObj.size }
 
         assertNull(mockedObj[100])
+    }
+
+    @Test
+    @Ignore
+    fun spyDemo() {
+        val spiedObj = spy<List<Int>>()
+
+        every { spiedObj[0] } returns 1
+
+        assertEquals(1, spiedObj[0])
+
+        assertThrows<IndexOutOfBoundsException> { spiedObj[1] }
     }
 }

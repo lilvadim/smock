@@ -7,12 +7,12 @@ import smock.internal.CallData
 import smock.internal.CallValuesStorage
 import java.lang.reflect.Method
 
-class CglibMockInterceptor(
+class CglibSpyInterceptor(
     callValuesStorage: CallValuesStorage
 ) : AbstractInterceptor(callValuesStorage), MethodInterceptor {
-    override fun intercept(obj: Any?, method: Method?, args: Array<out Any>?, proxy: MethodProxy?): Any? {
+    override fun intercept(obj: Any?, method: Method?, args: Array<out Any>?, proxy: MethodProxy): Any {
         val callData = CallData(obj, method, args?.toList() ?: emptyList())
         callValuesStorage.lastCall = callData
-        return callValuesStorage.registeredAction(callData)?.invoke()
+        return callValuesStorage.registeredAction(callData)?.invoke() ?: proxy.invokeSuper(obj, args)
     }
 }

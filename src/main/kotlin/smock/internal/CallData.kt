@@ -5,7 +5,7 @@ import java.lang.reflect.Method
 class CallData(
     val obj: Any?,
     val method: Method?,
-    val args: List<Any>
+    val args: List<Any?>
 ) {
     override fun hashCode(): Int {
         var result = method?.hashCode() ?: 0
