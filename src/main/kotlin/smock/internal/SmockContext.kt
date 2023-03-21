@@ -1,7 +1,9 @@
 package smock.internal
 
 object SmockContext {
+    private val callValuesStorage = CallValuesStorage()
     val dslDelegate = Smock(
-        MockFactory(callValuesStorage = CallValuesStorage())
+        mockFactory = MockFactory(callValuesStorage),
+        callValuesStorage = callValuesStorage
     )
 }

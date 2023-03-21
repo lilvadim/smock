@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.Exception
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class ApiDemo() {
     @Smocked
@@ -33,5 +34,7 @@ class ApiDemo() {
         assertEquals(2, answerCallbackCnt)
 
         assertThrows<Exception>("Size Exception") { mockedObj.size }
+
+        assertNull(mockedObj[100])
     }
 }

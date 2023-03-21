@@ -2,10 +2,10 @@ package smock.internal
 
 class Smock(
     val mockFactory: MockFactory,
-    private val callValuesStorage: CallValuesStorage = mockFactory.callValuesStorage
+    private val callValuesStorage: CallValuesStorage
 ) {
     inline fun <reified T : Any> mock(): T {
-        return mockFactory.create(T::class)
+        return mockFactory.mock(T::class)
     }
 
     fun returns(returnValue: Any?) {

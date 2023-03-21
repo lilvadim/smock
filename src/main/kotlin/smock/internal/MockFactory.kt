@@ -4,9 +4,7 @@ import smock.external.cglib.CglibMockFactory
 import kotlin.reflect.KClass
 
 interface MockFactory {
-    fun <T: Any> create(kClass: KClass<T>): T
-
-    val callValuesStorage: CallValuesStorage
+    fun <T: Any> mock(kClass: KClass<T>): T
 
     companion object DefaultFactory {
         operator fun invoke(callValuesStorage: CallValuesStorage): MockFactory = CglibMockFactory(callValuesStorage)
