@@ -1,25 +1,39 @@
 package smock.api
 
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import smock.api.annotations.SmockSpied
 import smock.api.annotations.Smocked
 import smock.api.annotations.smockAnnotated
-import kotlin.test.Ignore
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
+import kotlin.test.*
 
 class ApiDemo {
+    open class Foo {
+        open fun bar() = "Original Bar"
+        open fun baz() = "Original Baz"
+    }
+
     @Smocked
     lateinit var someObj: List<Double>
 
+    @SmockSpied
+    lateinit var foo: Foo
+
+    @BeforeTest
+    fun initAnnotations() {
+        smockAnnotated(this)
+    }
+
     @Test
     fun annotationsDemo() {
-        smockAnnotated(this)
-
         every { someObj.isEmpty() } returns false
 
         assertFalse { someObj.isEmpty() }
+
+
+        every { foo.bar() } returns "SMOCK"
+
+        assertEquals("SMOCK", foo.bar())
+        assertEquals("Original Baz", foo.baz())
     }
 
     @Test
@@ -51,14 +65,12 @@ class ApiDemo {
     }
 
     @Test
-    @Ignore
     fun spyDemo() {
-        val spiedObj = spy<List<Int>>()
+        val foo = spy<Foo>()
 
-        every { spiedObj[0] } returns 1
+        every { foo.bar() } returns "Mock"
 
-        assertEquals(1, spiedObj[0])
-
-        assertThrows<IndexOutOfBoundsException> { spiedObj[1] }
+        assertEquals("Mock", foo.bar())
+        assertEquals("Original Baz", foo.baz())
     }
 }
