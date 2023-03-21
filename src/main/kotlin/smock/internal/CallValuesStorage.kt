@@ -1,10 +1,8 @@
 package smock.internal
 
-import kotlin.Throws
+import smock.exception.NoLastCallException
 
 class CallValuesStorage {
-
-    class NoLastCallException(msg: String) : Exception(msg)
 
     var lastCall: CallData? = null
 

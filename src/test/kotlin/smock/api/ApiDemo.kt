@@ -1,9 +1,9 @@
 package smock.api
 
 import org.junit.jupiter.api.assertThrows
-import smock.api.annotations.SmockSpied
-import smock.api.annotations.Smocked
-import smock.api.annotations.smockAnnotated
+import smock.api.annotation.SmockSpied
+import smock.api.annotation.Smocked
+import smock.api.annotation.smockAnnotated
 import kotlin.test.*
 
 class ApiDemo {

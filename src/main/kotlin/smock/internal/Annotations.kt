@@ -1,7 +1,7 @@
 package smock.internal
 
-import smock.api.annotations.SmockSpied
-import smock.api.annotations.Smocked
+import smock.api.annotation.SmockSpied
+import smock.api.annotation.Smocked
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 

@@ -1,4 +1,4 @@
-package smock.api.annotations
+package smock.api.annotation
 
 import smock.internal.SmockContext
 
