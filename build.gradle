@@ -13,8 +13,11 @@ repositories {
 dependencies {
     implementation group: 'cglib', name: 'cglib', version: '3.3.0'
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
+    implementation 'net.bytebuddy:byte-buddy:1.14.2'
+
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation 'net.bytebuddy:byte-buddy:1.14.2'
 }
 
 test {

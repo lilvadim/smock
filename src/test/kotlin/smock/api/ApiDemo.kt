@@ -4,16 +4,21 @@ import org.junit.jupiter.api.assertThrows
 import smock.api.annotation.SmockSpied
 import smock.api.annotation.Smocked
 import smock.api.annotation.smockAnnotated
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class ApiDemo {
     open class Foo {
         open fun bar() = "Original Bar"
         open fun baz() = "Original Baz"
+        open fun foo() = "Original Foo"
+        open fun method() = "Original Method"
     }
 
     @Smocked
-    lateinit var someObj: List<Double>
+    lateinit var fooMock: Foo
 
     @SmockSpied
     lateinit var foo: Foo
@@ -25,10 +30,9 @@ class ApiDemo {
 
     @Test
     fun annotationsDemo() {
-        every { someObj.isEmpty() } returns false
+        every { fooMock.bar() } returns "SMOCK"
 
-        assertFalse { someObj.isEmpty() }
-
+        assertEquals("SMOCK", fooMock.bar())
 
         every { foo.bar() } returns "SMOCK"
 
@@ -38,10 +42,10 @@ class ApiDemo {
 
     @Test
     fun smockDemo() {
-        val mockedObj = smock<List<String>>()
+        val mockedObj = smock<Foo>()
 
-        every { mockedObj[0] } returns "SomeValue"
-        every { mockedObj[3] } returns "SomeValue 3"
+        every { mockedObj.bar() } returns "Smocked Bar"
+        every { mockedObj.baz() } returns "Smocked Baz"
 
         var answerCallbackCnt = 0
         every { mockedObj.toString() } answers {
@@ -49,19 +53,20 @@ class ApiDemo {
             "To String Value"
         }
 
-        every { mockedObj.size } throws Exception("Size Exception")
-
-        assertEquals("SomeValue", mockedObj[0])
-        assertEquals("SomeValue 3", mockedObj[3])
+        assertEquals("Smocked Bar", mockedObj.bar())
+        assertEquals("Smocked Baz", mockedObj.baz())
 
         assertEquals("To String Value", mockedObj.toString())
         mockedObj.toString()
 
         assertEquals(2, answerCallbackCnt)
 
-        assertThrows<Exception>("Size Exception") { mockedObj.size }
 
-        assertNull(mockedObj[100])
+        every { mockedObj.foo() } throws Exception("Bar Exception")
+
+        assertThrows<Exception>("Bar Exception") { mockedObj.foo() }
+
+        assertNull(mockedObj.method())
     }
 
     @Test

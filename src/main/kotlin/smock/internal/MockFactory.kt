@@ -1,6 +1,6 @@
 package smock.internal
 
-import smock.external.cglib.CglibMockFactory
+import smock.external.byteBuddy.ByteBuddyMockFactory
 import kotlin.reflect.KClass
 
 interface MockFactory {
@@ -9,6 +9,6 @@ interface MockFactory {
     fun <T : Any> spy(kClass: KClass<T>): T
 
     companion object DefaultFactory {
-        operator fun invoke(callValuesStorage: CallValuesStorage): MockFactory = CglibMockFactory(callValuesStorage)
+        operator fun invoke(callValuesStorage: CallValuesStorage): MockFactory = ByteBuddyMockFactory(callValuesStorage)
     }
 }
