@@ -1,13 +1,13 @@
 package smock.internal
 
-import smock.api.annotation.SmockSpied
-import smock.api.annotation.Smocked
+import smock.api.annotation.Smock
+import smock.api.annotation.Spy
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 
 val apiAnnotations: List<KClass<out Annotation>> = listOf(
-    Smocked::class,
-    SmockSpied::class
+    Smock::class,
+    Spy::class
 )
 
 class AnnotationFilter(

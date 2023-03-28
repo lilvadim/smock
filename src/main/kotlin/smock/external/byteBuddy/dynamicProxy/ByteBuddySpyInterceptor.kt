@@ -1,4 +1,4 @@
-package smock.external.byteBuddy
+package smock.external.byteBuddy.dynamicProxy
 
 import net.bytebuddy.implementation.bind.annotation.*
 import smock.internal.AbstractInterceptor

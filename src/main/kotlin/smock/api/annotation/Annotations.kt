@@ -3,11 +3,11 @@ package smock.api.annotation
 import smock.internal.SmockContext
 
 @Target(AnnotationTarget.FIELD)
-annotation class Smocked
+annotation class Smock
 
 @Target(AnnotationTarget.FIELD)
-annotation class SmockSpied
+annotation class Spy
 
-fun smockAnnotated(thisInstance: Any) {
+fun smock(thisInstance: Any) {
     SmockContext.dslDelegate.initAnnotated(thisInstance)
 }

@@ -1,7 +1,7 @@
 package smock.internal
 
-import smock.api.annotation.SmockSpied
-import smock.api.annotation.Smocked
+import smock.api.annotation.Smock
+import smock.api.annotation.Spy
 
 class Smock(
     val mockFactory: MockFactory,
@@ -12,13 +12,13 @@ class Smock(
         for (field in fields) {
             field.isAccessible = true
             when {
-                field.isAnnotationPresent(Smocked::class.java) ->
+                field.isAnnotationPresent(Smock::class.java) ->
                     field.set(
                         instance,
                         mockFactory.mock(field.type.kotlin)
                     )
 
-                field.isAnnotationPresent(SmockSpied::class.java) ->
+                field.isAnnotationPresent(Spy::class.java) ->
                     field.set(
                         instance,
                         mockFactory.spy(field.type.kotlin)

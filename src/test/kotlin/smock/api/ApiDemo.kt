@@ -1,9 +1,9 @@
 package smock.api
 
 import org.junit.jupiter.api.assertThrows
-import smock.api.annotation.SmockSpied
-import smock.api.annotation.Smocked
-import smock.api.annotation.smockAnnotated
+import smock.api.annotation.Smock
+import smock.api.annotation.Spy
+import smock.api.annotation.smock
 import smock.exception.SmockException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -17,15 +17,15 @@ class ApiDemo {
         open fun method() = "Original Method"
     }
 
-    @Smocked
+    @Smock
     lateinit var fooMock: Foo
 
-    @SmockSpied
+    @Spy
     lateinit var foo: Foo
 
     @BeforeTest
     fun initAnnotations() {
-        smockAnnotated(this)
+        smock(this)
     }
 
     @Test
