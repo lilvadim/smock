@@ -9,16 +9,19 @@ import java.util.concurrent.Callable
 
 class ByteBuddySpyInterceptor(
     callValuesStorage: CallValuesStorage
-) : AbstractInterceptor(callValuesStorage), ByteBuddyInterceptor {
+) : AbstractInterceptor(callValuesStorage) {
+
     @RuntimeType
-    override fun intercept(
+    fun intercept(
         @This obj: Any,
         @Origin method: Method,
         @AllArguments args: Array<Any?>,
-        @SuperCall superMethod: Callable<Any?>,
+        @SuperCall(nullIfImpossible = true) superMethod: Callable<Any?>?,
+        @DefaultCall(nullIfImpossible = true) defaultMethod: Callable<Any?>?
     ): Any? {
         val callData = CallData(obj, method, args.toList())
         callValuesStorage.lastCall = callData
-        return callValuesStorage.registeredAction(callData)?.invoke() ?: superMethod.call()
+        val callback = callValuesStorage.callback(callData) ?: { (defaultMethod ?: superMethod)?.call() }
+        return callback()
     }
 }

@@ -1,18 +1,11 @@
 package smock.internal
 
+import smock.exception.SmockException
+
 abstract class AbstractInterceptor(
     protected val callValuesStorage: CallValuesStorage
 ) {
-    fun CallValuesStorage.registeredAction(callData: CallData): (() -> Any?)? {
-        val returnValue = returnValue(callData)
-        val answerFunction = answersFunction(callData)
-        val throwable = throwable(callData)
-
-        when {
-            (returnValue != null) -> return { returnValue }
-            (answerFunction != null) -> return answerFunction
-            (throwable != null) -> return { throw throwable }
-            else -> return null
-        }
+    protected fun reportNoAnswerRegistered(callData: CallData) {
+        throw SmockException("No answer registered for ${callData.obj?.javaClass?.typeName}#${callData.method?.name}")
     }
 }

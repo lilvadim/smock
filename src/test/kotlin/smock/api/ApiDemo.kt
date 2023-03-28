@@ -4,13 +4,13 @@ import org.junit.jupiter.api.assertThrows
 import smock.api.annotation.SmockSpied
 import smock.api.annotation.Smocked
 import smock.api.annotation.smockAnnotated
+import smock.exception.SmockException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class ApiDemo {
-    open class Foo {
+    abstract class Foo {
         open fun bar() = "Original Bar"
         open fun baz() = "Original Baz"
         open fun foo() = "Original Foo"
@@ -66,7 +66,7 @@ class ApiDemo {
 
         assertThrows<Exception>("Bar Exception") { mockedObj.foo() }
 
-        assertNull(mockedObj.method())
+        assertThrows<SmockException> { mockedObj.method() }
     }
 
     @Test

@@ -10,12 +10,16 @@ inline fun <reified T> spy(): T {
     return SmockContext.dslDelegate.spy()
 }
 
-inline fun <reified R> every(mockedObjMethod: () -> R): EveryScope<R> {
-    mockedObjMethod()
-    return EveryScope()
+inline fun <reified R> every(mockedObjMethod: EveryScope.() -> R): BehaviorScope<R> {
+    SmockContext.dslDelegate.startRecordingCall()
+    EveryScope().mockedObjMethod()
+    SmockContext.dslDelegate.stopRecordingCall()
+    return BehaviorScope()
 }
 
-class EveryScope<T> {
+class EveryScope
+
+class BehaviorScope<T> {
     infix fun returns(value: T) {
         SmockContext.dslDelegate.returns(value)
     }
@@ -29,7 +33,7 @@ class EveryScope<T> {
     }
 }
 
-infix fun EveryScope<Unit>.just(runs: Runs) {
+infix fun BehaviorScope<Unit>.just(runs: Runs) {
     SmockContext.dslDelegate.returns(Unit)
 }
 

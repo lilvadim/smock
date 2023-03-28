@@ -4,6 +4,8 @@ import smock.exception.NoLastCallException
 
 class CallValuesStorage {
 
+    private var isCallRecording = false
+
     var lastCall: CallData? = null
 
     private val returnValues: MutableMap<CallData, Any?> = mutableMapOf()
@@ -12,11 +14,18 @@ class CallValuesStorage {
 
     private val throwables: MutableMap<CallData, Throwable> = mutableMapOf()
 
-    fun returnValue(callData: CallData) = returnValues[callData]
+    fun callback(callData: CallData): (() -> Any?)? {
+        val returnValue = returnValues[callData]
+        val answerFunction = answerFunctions[callData]
+        val throwable = throwables[callData]
 
-    fun answersFunction(callData: CallData) = answerFunctions[callData]
-
-    fun throwable(callData: CallData) = throwables[callData]
+        when {
+            (returnValue != null) -> return { returnValue }
+            (answerFunction != null) -> return answerFunction
+            (throwable != null) -> return { throw throwable }
+            else -> return null
+        }
+    }
 
     @Throws(NoLastCallException::class)
     fun registerReturnValueForLastCall(returnValue: Any?) {
@@ -48,4 +57,14 @@ class CallValuesStorage {
     private fun reportNoLastCall() {
         throw NoLastCallException("No calls of mocked object methods were registered")
     }
+
+    fun startRecordingCall() {
+        isCallRecording = true
+    }
+
+    fun stopRecordingCall() {
+        isCallRecording = false
+    }
+
+    fun isRecordingCall() = isCallRecording
 }

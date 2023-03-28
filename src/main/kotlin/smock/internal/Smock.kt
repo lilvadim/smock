@@ -46,4 +46,12 @@ class Smock(
     fun throws(throwable: Throwable) {
         callValuesStorage.registerThrowableForLastCall(throwable)
     }
+
+    fun startRecordingCall() {
+        callValuesStorage.startRecordingCall()
+    }
+
+    fun stopRecordingCall() {
+        callValuesStorage.stopRecordingCall()
+    }
 }

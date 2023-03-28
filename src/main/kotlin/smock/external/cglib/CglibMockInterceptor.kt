@@ -13,6 +13,6 @@ class CglibMockInterceptor(
     override fun intercept(obj: Any, method: Method?, args: Array<out Any>?, proxy: MethodProxy?): Any? {
         val callData = CallData(obj, method, args?.toList() ?: emptyList())
         callValuesStorage.lastCall = callData
-        return callValuesStorage.registeredAction(callData)?.invoke()
+        return callValuesStorage.callback(callData)?.invoke()
     }
 }
