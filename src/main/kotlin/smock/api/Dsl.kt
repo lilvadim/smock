@@ -44,3 +44,7 @@ typealias runs = Runs
 fun smockStatic(classToMock: KClass<*>) {
     SmockContext.dslDelegate.mockStatic(classToMock)
 }
+
+fun unmockStatic(classToUnmock: KClass<*>) {
+    SmockContext.dslDelegate.unmockStatic(classToUnmock)
+}
