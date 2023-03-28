@@ -19,6 +19,8 @@ class ApiDemo {
 
     class FinalFoo {
         fun bar() = "Original Bar"
+
+        fun baz() = "Original Baz"
     }
 
     @Smock
@@ -39,6 +41,13 @@ class ApiDemo {
         every { finalFoo.bar() } returns "Mocked Bar"
 
         assertEquals("Mocked Bar", finalFoo.bar())
+
+        val spyFinalFoo = spy<FinalFoo>()
+
+        every { spyFinalFoo.baz() } returns "Mocked Baz"
+
+        assertEquals("Mocked Baz", spyFinalFoo.baz())
+        assertEquals("Original Bar", spyFinalFoo.bar())
     }
 
     @Test

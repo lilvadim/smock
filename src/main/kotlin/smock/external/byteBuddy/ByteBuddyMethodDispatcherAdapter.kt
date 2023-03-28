@@ -19,24 +19,4 @@ object ByteBuddyMethodDispatcherAdapter {
         val superMethodCasted = { superMethod?.call() }
         return MethodDispatcher.delegate(CallerIdentifier(objRef = obj), obj, method, args, superMethodCasted)
     }
-
-
-//    @OnMethodEnter
-//    fun interceptRedefined(
-//        @This obj: Any?,
-//        @Origin method: Method,
-//        @AllArguments args: Array<Any?>,
-//        @SuperCall(nullIfImpossible = true) superMethod: Callable<Any?>?,
-//    ): Any? {
-//
-//    }
-
-//    @RuntimeType
-//    fun interceptStatic(
-//        @Origin staticSource: Class<*>,
-//        @AllArguments args: Array<Any?>,
-//        @SuperCall(nullIfImpossible = true) superMethod: Callable<Any?>?,
-//    ): Any? {
-//        return intercept(null, method, args, superMethod)
-//    }
 }

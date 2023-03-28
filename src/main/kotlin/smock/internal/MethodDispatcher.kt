@@ -1,6 +1,7 @@
 package smock.internal
 
 import java.lang.reflect.Method
+import java.util.logging.Logger
 
 object MethodDispatcher {
     private val interceptorsStorage: MutableMap<CallerIdentifier, Interceptor> = mutableMapOf()
@@ -15,6 +16,7 @@ object MethodDispatcher {
     ): Any? {
         val interceptor = interceptorsStorage[callerIdentifier]
         if (interceptor != null) {
+            Logger.getGlobal().info("Interceptor found")
             return interceptor.intercept(obj, method, args, superMethod)
         } else {
             throw IllegalStateException("No interceptor found for $method")

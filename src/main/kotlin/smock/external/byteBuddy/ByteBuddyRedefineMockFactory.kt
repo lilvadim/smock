@@ -2,9 +2,9 @@ package smock.external.byteBuddy
 
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.agent.ByteBuddyAgent
+import net.bytebuddy.asm.Advice
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy
-import net.bytebuddy.implementation.MethodDelegation
-import net.bytebuddy.matcher.ElementMatchers
+import net.bytebuddy.matcher.ElementMatchers.isMethod
 import smock.internal.*
 import kotlin.reflect.KClass
 
@@ -25,8 +25,10 @@ class ByteBuddyRedefineMockFactory(
     }
 
     private fun <T : Any> createInstance(kClass: KClass<T>): T = byteBuddy.redefine(kClass.java)
-        .method(ElementMatchers.any())
-        .intercept(MethodDelegation.to(ByteBuddyMethodDispatcherAdapter::class.java))
+        .visit(
+            Advice.to(ByteBuddyMethodDispatcherAdapterJ::class.java)
+                .on(isMethod())
+        )
         .make()
         .load(kClass.java.classLoader, ClassReloadingStrategy.fromInstalledAgent())
         .loaded
