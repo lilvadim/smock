@@ -7,6 +7,8 @@ import net.bytebuddy.implementation.MethodDelegation
 import net.bytebuddy.matcher.ElementMatchers
 import smock.internal.CallValuesStorage
 import smock.internal.MockFactory
+import java.lang.instrument.ClassDefinition
+import java.lang.instrument.Instrumentation
 import kotlin.reflect.KClass
 
 class ByteBuddyRedefineMockFactory(
@@ -14,31 +16,40 @@ class ByteBuddyRedefineMockFactory(
     private val byteBuddy: ByteBuddy = ByteBuddy()
 ) : MockFactory {
     override fun <T : Any> mock(kClass: KClass<T>): T {
-        return byteBuddy.redefine(kClass.java)
+        val unloaded = byteBuddy.redefine(kClass.java)
             .method(ElementMatchers.any())
             .intercept(MethodDelegation.to(ByteBuddyMockInterceptor(callValuesStorage)))
             .make()
-            .load(ClassLoader.getSystemClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+
+        val bytes = unloaded.bytes
+
+        val newClass = unloaded
+            .load(ClassLoader.getSystemClassLoader(), ClassLoadingStrategy.Default.CHILD_FIRST)
             .loaded
-            .getConstructor()
-            .newInstance()
+
+        instrumentation.redefineClasses(ClassDefinition(newClass, bytes))
+
+        return kClass.java.getConstructor().newInstance()
     }
 
     override fun <T : Any> spy(kClass: KClass<T>): T {
-        TODO("Not yet implemented")
-        return byteBuddy.redefine(kClass.java)
+        val unloaded = byteBuddy.redefine(kClass.java)
             .method(ElementMatchers.any())
             .intercept(MethodDelegation.to(ByteBuddySpyInterceptor(callValuesStorage)))
             .make()
-            .load(kClass.java.classLoader)
+
+        val bytes = unloaded.bytes
+
+        val newClass = unloaded
+            .load(ClassLoader.getSystemClassLoader(), ClassLoadingStrategy.Default.CHILD_FIRST)
             .loaded
-            .getConstructor()
-            .newInstance()
+
+        instrumentation.redefineClasses(ClassDefinition(newClass, bytes))
+
+        return kClass.java.getConstructor().newInstance()
     }
 
     companion object StaticAgentInitializer {
-        init {
-            ByteBuddyAgent.install()
-        }
+        private val instrumentation: Instrumentation = ByteBuddyAgent.install()
     }
 }

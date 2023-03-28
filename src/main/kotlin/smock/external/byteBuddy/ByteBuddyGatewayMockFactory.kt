@@ -11,6 +11,7 @@ class ByteBuddyGatewayMockFactory(
     private val byteBuddy = ByteBuddy()
     private val subclassMockFactory = ByteBuddySubclassMockFactory(callValuesStorage, byteBuddy)
     private val redefineMockFactory = ByteBuddyRedefineMockFactory(callValuesStorage, byteBuddy)
+
     override fun <T : Any> mock(kClass: KClass<T>): T {
         return if (kClass.isFinal) {
             redefineMockFactory.mock(kClass)
