@@ -2,54 +2,53 @@ package smock.external.byteBuddy
 
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.agent.ByteBuddyAgent
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy
-import net.bytebuddy.implementation.MethodDelegation
-import net.bytebuddy.matcher.ElementMatchers
-import smock.internal.CallValuesStorage
-import smock.internal.MockFactory
-import java.lang.instrument.ClassDefinition
-import java.lang.instrument.Instrumentation
+import net.bytebuddy.asm.Advice
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy
+import net.bytebuddy.matcher.ElementMatchers.isMethod
+import smock.internal.*
 import kotlin.reflect.KClass
 
 class ByteBuddyRedefineMockFactory(
     private val callValuesStorage: CallValuesStorage,
     private val byteBuddy: ByteBuddy = ByteBuddy()
 ) : MockFactory {
+
     override fun <T : Any> mock(kClass: KClass<T>): T {
-        val unloaded = byteBuddy.redefine(kClass.java)
-            .method(ElementMatchers.any())
-            .intercept(MethodDelegation.to(ByteBuddyMockInterceptor(callValuesStorage)))
-            .make()
+        val newInstance = createInstance(kClass)
 
-        val bytes = unloaded.bytes
+        MethodDispatcher.registerInterceptor(
+            CallerIdentifier(objRef = newInstance, newInstance::class.java),
+            MockInterceptor(callValuesStorage)
+        )
 
-        val newClass = unloaded
-            .load(ClassLoader.getSystemClassLoader(), ClassLoadingStrategy.Default.CHILD_FIRST)
-            .loaded
-
-        instrumentation.redefineClasses(ClassDefinition(newClass, bytes))
-
-        return kClass.java.getConstructor().newInstance()
+        return newInstance
     }
 
+    private fun <T : Any> createInstance(kClass: KClass<T>): T = byteBuddy.redefine(kClass.java)
+        .visit(
+            Advice.to(ByteBuddyMethodDispatcherAdapterJ::class.java)
+                .on(isMethod())
+        )
+        .make()
+        .load(kClass.java.classLoader, ClassReloadingStrategy.fromInstalledAgent())
+        .loaded
+        .getConstructor()
+        .newInstance()
+
     override fun <T : Any> spy(kClass: KClass<T>): T {
-        val unloaded = byteBuddy.redefine(kClass.java)
-            .method(ElementMatchers.any())
-            .intercept(MethodDelegation.to(ByteBuddySpyInterceptor(callValuesStorage)))
-            .make()
+        val newInstance = createInstance(kClass)
 
-        val bytes = unloaded.bytes
+        MethodDispatcher.registerInterceptor(
+            CallerIdentifier(objRef = newInstance, newInstance::class.java),
+            SpyInterceptor(callValuesStorage)
+        )
 
-        val newClass = unloaded
-            .load(ClassLoader.getSystemClassLoader(), ClassLoadingStrategy.Default.CHILD_FIRST)
-            .loaded
-
-        instrumentation.redefineClasses(ClassDefinition(newClass, bytes))
-
-        return kClass.java.getConstructor().newInstance()
+        return newInstance
     }
 
     companion object StaticAgentInitializer {
-        private val instrumentation: Instrumentation = ByteBuddyAgent.install()
+        init {
+            ByteBuddyAgent.install()
+        }
     }
 }
