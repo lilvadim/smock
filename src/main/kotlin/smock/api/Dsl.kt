@@ -1,6 +1,7 @@
 package smock.api
 
 import smock.internal.SmockContext
+import kotlin.reflect.KClass
 
 inline fun <reified T> smock(): T {
     return SmockContext.dslDelegate.mock()
@@ -39,3 +40,7 @@ infix fun BehaviorScope<Unit>.just(runs: Runs) {
 
 object Runs
 typealias runs = Runs
+
+fun smockStatic(classToMock: KClass<*>) {
+    SmockContext.dslDelegate.mockStatic(classToMock)
+}

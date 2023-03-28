@@ -2,9 +2,11 @@ package smock.internal
 
 import smock.api.annotation.Smock
 import smock.api.annotation.Spy
+import kotlin.reflect.KClass
 
 class Smock(
     val mockFactory: MockFactory,
+    val staticMock: StaticMock,
     private val callValuesStorage: CallValuesStorage
 ) {
     fun initAnnotated(instance: Any) {
@@ -53,5 +55,13 @@ class Smock(
 
     fun stopRecordingCall() {
         callValuesStorage.stopRecordingCall()
+    }
+
+    fun mockStatic(classToMock: KClass<*>) {
+        staticMock.mock(classToMock)
+    }
+
+    fun unmockStatic(classToUnmock: KClass<*>) {
+        staticMock.unmock(classToUnmock)
     }
 }

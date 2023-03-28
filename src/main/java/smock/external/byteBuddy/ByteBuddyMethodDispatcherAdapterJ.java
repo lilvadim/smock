@@ -15,7 +15,6 @@ public class ByteBuddyMethodDispatcherAdapterJ {
             @Advice.Origin Method method,
             @Advice.AllArguments Object[] args
     ) {
-
         return MethodDispatcher.delegate(new CallerIdentifier(obj, null), obj, method, args, null);
     }
 
@@ -24,10 +23,7 @@ public class ByteBuddyMethodDispatcherAdapterJ {
             @Advice.Enter Object enter,
             @Advice.Return(readOnly = false, typing = Assigner.Typing.DYNAMIC) Object returnValue,
             @Advice.Thrown SmockException exception
-    ) throws SmockException {
-        if (exception != null) {
-            throw exception;
-        }
+    ) {
         returnValue = enter;
     }
 }
