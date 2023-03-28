@@ -1,4 +1,4 @@
-package smock.external.byteBuddy.dynamicProxy
+package smock.external.byteBuddy
 
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.implementation.MethodDelegation

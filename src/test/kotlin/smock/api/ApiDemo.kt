@@ -17,6 +17,10 @@ class ApiDemo {
         open fun method() = "Original Method"
     }
 
+    class FinalFoo {
+        fun bar() = "Original Bar"
+    }
+
     @Smock
     lateinit var fooMock: Foo
 
@@ -26,6 +30,11 @@ class ApiDemo {
     @BeforeTest
     fun initAnnotations() {
         smock(this)
+    }
+
+    @Test
+    fun finalDemo() {
+        val finalFoo = smock<FinalFoo>()
     }
 
     @Test

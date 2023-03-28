@@ -1,6 +1,6 @@
 package smock.internal
 
-import smock.external.byteBuddy.dynamicProxy.ByteBuddySubclassMockFactory
+import smock.external.byteBuddy.ByteBuddyGatewayMockFactory
 import kotlin.reflect.KClass
 
 interface MockFactory {
@@ -10,6 +10,6 @@ interface MockFactory {
 
     companion object DefaultFactory {
         operator fun invoke(callValuesStorage: CallValuesStorage): MockFactory =
-            ByteBuddySubclassMockFactory(callValuesStorage)
+            ByteBuddyGatewayMockFactory(callValuesStorage)
     }
 }
