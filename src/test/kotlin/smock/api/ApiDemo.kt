@@ -35,6 +35,10 @@ class ApiDemo {
     @Test
     fun finalDemo() {
         val finalFoo = smock<FinalFoo>()
+
+        every { finalFoo.bar() } returns "Mocked Bar"
+
+        assertEquals("Mocked Bar", finalFoo.bar())
     }
 
     @Test
