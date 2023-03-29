@@ -49,7 +49,6 @@ class ApiDemo {
         every { spyFinalFoo.baz() } returns "Mocked Baz"
 
         assertEquals("Mocked Baz", spyFinalFoo.baz())
-        //assertEquals("Original Bar", spyFinalFoo.bar())
     }
 
     @Test
