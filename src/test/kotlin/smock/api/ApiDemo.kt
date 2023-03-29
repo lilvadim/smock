@@ -1,5 +1,6 @@
 package smock.api
 
+import BarFoo
 import FooBar
 import org.junit.jupiter.api.assertThrows
 import smock.api.annotation.Smock
@@ -59,9 +60,19 @@ class ApiDemo {
 
         assertEquals("Bar", FooBar.Foo())
 
+        smockStatic(BarFoo::class)
+
+        every { BarFoo.bar("abc") } returns "f"
+
+        assertEquals("f", BarFoo.bar("abc"))
+
         unmockStatic(FooBar::class)
 
         assertEquals("Foo", FooBar.Foo())
+
+        unmockStatic(BarFoo::class)
+
+        assertEquals("bar abc", BarFoo.bar("abc"))
     }
 
     @Test
@@ -73,6 +84,7 @@ class ApiDemo {
         every { foo.bar() } returns "SMOCK"
 
         assertEquals("SMOCK", foo.bar())
+
         assertEquals("Original Baz", foo.baz())
     }
 
