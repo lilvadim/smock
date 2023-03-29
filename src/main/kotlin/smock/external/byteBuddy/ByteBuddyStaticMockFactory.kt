@@ -20,7 +20,6 @@ class ByteBuddyStaticMockFactory(
             MockInterceptor(callValuesStorage)
         )
 
-        ByteBuddyAgent.install()
         byteBuddy
             .redefine(kClass.java)
             .method(ElementMatchers.isStatic())
@@ -33,10 +32,10 @@ class ByteBuddyStaticMockFactory(
         TODO("Not yet implemented")
     }
 
-//    companion object StaticAgentInitializer {
-//        init {
-//            ByteBuddyAgent.install()
-//        }
-//    }
+    companion object StaticAgentInitializer {
+        init {
+            ByteBuddyAgent.install()
+        }
+    }
 
 }
