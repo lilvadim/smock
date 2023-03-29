@@ -56,8 +56,10 @@ class ApiDemo {
         smockStatic(FooBar::class)
 
         every { FooBar.foo() } returns "Bar"
+        every { FooBar.bar() } throws IllegalStateException()
 
         assertEquals("Bar", FooBar.foo())
+        assertThrows<IllegalStateException> { FooBar.bar() }
 
         smockStatic(BarFoo::class)
 
