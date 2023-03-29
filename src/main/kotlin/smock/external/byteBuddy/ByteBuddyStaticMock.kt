@@ -9,7 +9,7 @@ import net.bytebuddy.matcher.ElementMatchers
 import smock.internal.*
 import kotlin.reflect.KClass
 
-class ByteBuddyStaticMockFactory(
+class ByteBuddyStaticMock(
     private val callValuesStorage: CallValuesStorage,
 ) : StaticMock {
     private val byteBuddy = ByteBuddy()

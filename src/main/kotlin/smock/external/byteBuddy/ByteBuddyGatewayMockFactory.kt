@@ -6,7 +6,7 @@ import smock.internal.MockFactory
 import kotlin.reflect.KClass
 
 class ByteBuddyGatewayMockFactory(
-    val callValuesStorage: CallValuesStorage
+    callValuesStorage: CallValuesStorage
 ) : MockFactory {
     private val byteBuddy = ByteBuddy()
     private val subclassMockFactory = ByteBuddySubclassMockFactory(callValuesStorage, byteBuddy)

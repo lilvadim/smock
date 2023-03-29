@@ -10,7 +10,7 @@ object ByteBuddyMethodDispatcherAdapter {
 
     @JvmStatic
     @RuntimeType
-    fun interceptDynamic(
+    fun delegate(
         @This obj: Any?,
         @Origin method: Method,
         @AllArguments args: Array<Any?>,

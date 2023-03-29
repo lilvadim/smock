@@ -1,6 +1,6 @@
 package smock.internal
 
-import smock.external.byteBuddy.ByteBuddyStaticMockFactory
+import smock.external.byteBuddy.ByteBuddyStaticMock
 import kotlin.reflect.KClass
 
 interface StaticMock {
@@ -10,6 +10,6 @@ interface StaticMock {
 
     companion object DefaultFactory {
         operator fun invoke(callValuesStorage: CallValuesStorage): StaticMock =
-            ByteBuddyStaticMockFactory(callValuesStorage)
+            ByteBuddyStaticMock(callValuesStorage)
     }
 }
