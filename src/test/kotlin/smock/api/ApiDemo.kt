@@ -58,6 +58,10 @@ class ApiDemo {
         every { FooBar.Foo() } returns "Bar"
 
         assertEquals("Bar", FooBar.Foo())
+
+        unmockStatic(FooBar::class)
+
+        assertEquals("Foo", FooBar.Foo())
     }
 
     @Test
