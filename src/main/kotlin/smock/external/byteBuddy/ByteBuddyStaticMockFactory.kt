@@ -1,6 +1,5 @@
 package smock.external.byteBuddy
 
-import Source
 import net.bytebuddy.ByteBuddy
 import net.bytebuddy.agent.ByteBuddyAgent
 import net.bytebuddy.dynamic.DynamicType
@@ -30,12 +29,12 @@ class ByteBuddyStaticMockFactory(
             .method(ElementMatchers.isStatic())
             .intercept(MethodDelegation.to(StaticAdapter::class.java))
             .make()
-            .load(Source::class.java.classLoader, ClassReloadingStrategy.fromInstalledAgent())
+            .load(kClass.java.classLoader, ClassReloadingStrategy.fromInstalledAgent())
     }
 
     override fun unmock(kClass: KClass<*>) {
         if (classMap.containsKey(kClass)) {
-            classMap[kClass]?.load(Source::class.java.classLoader, ClassReloadingStrategy.fromInstalledAgent())
+            classMap[kClass]?.load(kClass.java.classLoader, ClassReloadingStrategy.fromInstalledAgent())
         }
     }
 
