@@ -55,9 +55,9 @@ class ApiDemo {
     fun staticDemo() {
         smockStatic(FooBar::class)
 
-        every { FooBar.Foo() } returns "Bar"
+        every { FooBar.foo() } returns "Bar"
 
-        assertEquals("Bar", FooBar.Foo())
+        assertEquals("Bar", FooBar.foo())
 
         smockStatic(BarFoo::class)
 
@@ -67,7 +67,7 @@ class ApiDemo {
 
         unmockStatic(FooBar::class)
 
-        assertEquals("Foo", FooBar.Foo())
+        assertEquals("Foo", FooBar.foo())
 
         unmockStatic(BarFoo::class)
 
