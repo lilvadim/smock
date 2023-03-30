@@ -1,2 +1,2 @@
 # Smock
-Mocking Framework for JVM
+Mocking Framework for Kotlin
